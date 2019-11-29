@@ -26,6 +26,16 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
+## to generate JSON data
+```
+node_modules\.bin\ng run generate
+```
+
+## to start json server on localhost:3000
+```
+node_modules\.bin\ng run server
+```
+
 ## Instructions for most of this:
 https://www.techiediaries.com/angular-tutorial-by-example-consume-rest-apis-send-http-get-requests-with-httpclient-and-deploy-to-cloud/
 
