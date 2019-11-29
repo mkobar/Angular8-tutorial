@@ -5,6 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 import { ApiService } from '../api.service';
+import { Product } from '../product';
 
 @Component({
   selector: 'app-home',
@@ -13,7 +14,7 @@ import { ApiService } from '../api.service';
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-  products = [];
+  products: Product[] = [];
   destroy$: Subject<boolean> = new Subject<boolean>(); 
   
   constructor(private apiService: ApiService) { }
@@ -24,11 +25,21 @@ export class HomeComponent implements OnInit, OnDestroy {
 	console.log(data);  
 	this.products = data;  
 	})
-  ***/
+   ***/
+
+    // add params for pagination
+    /***
     this.apiService.sendGetRequest().pipe(takeUntil(this.destroy$)).subscribe((res: HttpResponse<any>)=>{  
 	console.log(res);  
 	this.products = res.body;  
-    })  
+	})
+    ***/
+
+    // add interface
+    this.apiService.sendGetRequest().pipe(takeUntil(this.destroy$)).subscribe((res: HttpResponse<Product[]>) => {
+      console.log(res);
+      this.products = res.body;
+    })
   }
 
   ngOnDestroy() {
@@ -39,7 +50,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public firstPage() {
     this.products = [];
-    this.apiService.sendGetRequestToUrl(this.apiService.first).pipe(takeUntil(this.destroy$)).subscribe((res: HttpResponse<any>) => {
+    //this.apiService.sendGetRequestToUrl(this.apiService.first).pipe(takeUntil(this.destroy$)).subscribe((res: HttpResponse<any>) => {
+    this.apiService.sendGetRequestToUrl(this.apiService.first).pipe(takeUntil(this.destroy$)).subscribe((res: HttpResponse<Product[]>) => {
       console.log(res);
       this.products = res.body;
     })
@@ -48,7 +60,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     if (this.apiService.prev !== undefined && this.apiService.prev !== '') {
       this.products = [];
-      this.apiService.sendGetRequestToUrl(this.apiService.prev).pipe(takeUntil(this.destroy$)).subscribe((res: HttpResponse<any>) => {
+      //this.apiService.sendGetRequestToUrl(this.apiService.prev).pipe(takeUntil(this.destroy$)).subscribe((res: HttpResponse<any>) => {
+      this.apiService.sendGetRequestToUrl(this.apiService.prev).pipe(takeUntil(this.destroy$)).subscribe((res: HttpResponse<Product[]>) => {
         console.log(res);
         this.products = res.body;
       })
@@ -58,7 +71,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   public nextPage() {
     if (this.apiService.next !== undefined && this.apiService.next !== '') {
       this.products = [];
-      this.apiService.sendGetRequestToUrl(this.apiService.next).pipe(takeUntil(this.destroy$)).subscribe((res: HttpResponse<any>) => {
+      //this.apiService.sendGetRequestToUrl(this.apiService.next).pipe(takeUntil(this.destroy$)).subscribe((res: HttpResponse<any>) => {
+      this.apiService.sendGetRequestToUrl(this.apiService.next).pipe(takeUntil(this.destroy$)).subscribe((res: HttpResponse<Product[]>) => {
         console.log(res);
         this.products = res.body;
       })
@@ -66,7 +80,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   public lastPage() {
     this.products = [];
-    this.apiService.sendGetRequestToUrl(this.apiService.last).pipe(takeUntil(this.destroy$)).subscribe((res: HttpResponse<any>) => {
+    //this.apiService.sendGetRequestToUrl(this.apiService.last).pipe(takeUntil(this.destroy$)).subscribe((res: HttpResponse<any>) => {
+    this.apiService.sendGetRequestToUrl(this.apiService.last).pipe(takeUntil(this.destroy$)).subscribe((res: HttpResponse<Product[]>) => {
       console.log(res);
       this.products = res.body;
     })

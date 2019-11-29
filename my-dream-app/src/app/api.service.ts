@@ -5,6 +5,8 @@ import {  throwError } from 'rxjs';
 //import { retry, catchError } from 'rxjs/operators';
 import { retry, catchError, tap } from 'rxjs/operators';
 
+import { Product } from './product';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -33,15 +35,30 @@ public last: string = "";
 
   public sendGetRequest(){
     //return this.httpClient.get(this.SERVER_URL).pipe(catchError(this.handleError));
+    // add retry
     //return this.httpClient.get(this.SERVER_URL).pipe(retry(3), catchError(this.handleError));
 
-    // Add safe, URL encoded _page and _limit parameters 
-
-    return this.httpClient.get(this.SERVER_URL, {  params: new HttpParams({fromString: "_page=1&_limit=20"}), observe: "response"}).pipe(retry(3), catchError(this.handleError), tap(res => {
+    // Add safe, URL encoded _page and _limit parameters
+    /*** 
+    return this.httpClient.get(this.SERVER_URL, {  
+      params: new HttpParams({
+        fromString: "_page=1&_limit=20"
+      }), observe: "response"
+      }).pipe(retry(3), catchError(this.handleError), tap(res => {
       console.log(res.headers.get('Link'));
       this.parseLinkHeader(res.headers.get('Link'));
     }));
-    }
+    ***/
+    // add interface
+    return this.httpClient.get<Product[]>(this.SERVER_URL, {
+      params: new HttpParams({
+        fromString: "_page=1&_limit=20"
+      }), observe: "response"
+      }).pipe(retry(3), catchError(this.handleError), tap(res => {
+      console.log(res.headers.get('Link'));
+      this.parseLinkHeader(res.headers.get('Link'));
+    }));
+  }
 
   parseLinkHeader(header) {
     if (header.length == 0) {
@@ -64,13 +81,24 @@ public last: string = "";
     this.next   = links["next"]; 
   }
 
-public sendGetRequestToUrl(url: string){  
-	return this.httpClient.get(url, { observe: "response"}).pipe(retry(3), 			
-	catchError(this.handleError), tap(res => {  
-		console.log(res.headers.get('Link'));  
-		this.parseLinkHeader(res.headers.get('Link'));
-	}));  
-}
+  public sendGetRequestToUrl(url: string){
+    /***
+    return this.httpClient.get(url, {
+      observe: "response"
+    }).pipe(retry(3),catchError(this.handleError), tap(res => {  
+      console.log(res.headers.get('Link'));  
+      this.parseLinkHeader(res.headers.get('Link'));
+    }));  
+    ***/
+
+    // add interface
+    return this.httpClient.get<Product[]>(url, {
+      observe: "response"
+    }).pipe(retry(3), catchError(this.handleError), tap(res => {
+      console.log(res.headers.get('Link'));
+      this.parseLinkHeader(res.headers.get('Link'));
+    }));
+  }
    
 }
 
