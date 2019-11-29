@@ -12,7 +12,7 @@ export class HomeComponent implements OnInit {
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
-    this.apiService.get().subscribe((data: any[])=>{  
+    this.apiService.sendGetRequest().subscribe((data: any[])=>{  
 	console.log(data);  
 	this.products = data;  
     })  
