@@ -32,7 +32,9 @@ public last: string = "";
   }
 
   public sendGetRequest(){
-  //return this.httpClient.get(this.SERVER_URL).pipe(catchError(this.handleError));
+    //return this.httpClient.get(this.SERVER_URL).pipe(catchError(this.handleError));
+    //return this.httpClient.get(this.SERVER_URL).pipe(retry(3), catchError(this.handleError));
+
     // Add safe, URL encoded _page and _limit parameters 
 
     return this.httpClient.get(this.SERVER_URL, {  params: new HttpParams({fromString: "_page=1&_limit=20"}), observe: "response"}).pipe(retry(3), catchError(this.handleError), tap(res => {
