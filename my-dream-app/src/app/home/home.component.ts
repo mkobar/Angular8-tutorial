@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 //import 'rxjs/add/operator/takeUntil';
 import { takeUntil } from 'rxjs/operators';
@@ -11,7 +11,7 @@ import { ApiService } from '../api.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
 
   products = [];
   destroy$: Subject<boolean> = new Subject<boolean>(); 
@@ -29,6 +29,12 @@ export class HomeComponent implements OnInit {
 	console.log(res);  
 	this.products = res.body;  
     })  
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next(true);
+    // Unsubscribe from the subject
+    this.destroy$.unsubscribe();
   }
 
   public firstPage() {
